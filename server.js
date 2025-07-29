@@ -69,15 +69,67 @@ app.use(express.static('public'));
 app.use(session({
     secret: process.env.SESSION_SECRET || 'bank-app-secret-key-very-long-and-secure',
     resave: false,
-    saveUninitialized: true, // Changed to true for better session handling
+    saveUninitialized: true,
     cookie: { 
-        secure: false, // Disable secure for local testing
+        secure: false, // Always false for now to test
         httpOnly: true,
         sameSite: 'lax',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
     },
-    name: 'bank.session.id' // Custom session name
+    name: 'bank.session.id'
 }));
+
+// Simple token-based auth as backup for serverless
+const activeTokens = new Map();
+const TOKEN_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
+
+function generateAuthToken() {
+    return crypto.randomBytes(32).toString('hex');
+}
+
+function isValidToken(token) {
+    const tokenData = activeTokens.get(token);
+    if (!tokenData) return false;
+    
+    if (Date.now() > tokenData.expires) {
+        activeTokens.delete(token);
+        return false;
+    }
+    
+    return true;
+}
+
+function getTokenFromRequest(req) {
+    // Check Authorization header first
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        return authHeader.substring(7);
+    }
+    
+    // Check cookies
+    if (req.headers.cookie) {
+        const cookies = req.headers.cookie.split(';');
+        for (let cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'authToken') {
+                return value;
+            }
+        }
+    }
+    
+    return null;
+}
+
+function isAuthenticated(req) {
+    // Check session first
+    if (req.session && req.session.authenticated) {
+        return true;
+    }
+    
+    // Check token as backup
+    const token = getTokenFromRequest(req);
+    return token && isValidToken(token);
+}
 
 // ========== UTILITY FUNCTIONS ==========
 
@@ -452,17 +504,36 @@ app.post('/api/auth/login', (req, res) => {
     console.log('  Session ID before:', req.sessionID);
     
     if (authenticate(username, password)) {
+        // Set session
         req.session.authenticated = true;
         req.session.username = username;
         req.session.loginTime = new Date().toISOString();
         
+        // Generate token as backup
+        const token = generateAuthToken();
+        activeTokens.set(token, {
+            username: username,
+            expires: Date.now() + TOKEN_EXPIRY,
+            createdAt: new Date().toISOString()
+        });
+        
         console.log('Login successful:');
         console.log('  Session ID after:', req.sessionID);
         console.log('  Session data:', req.session);
+        console.log('  Auth token created:', token);
+        
+        // Set cookie with token
+        res.cookie('authToken', token, {
+            httpOnly: true,
+            secure: false, // false for testing
+            sameSite: 'lax',
+            maxAge: TOKEN_EXPIRY
+        });
         
         res.json({ 
             success: true, 
             sessionId: req.sessionID,
+            authToken: token,
             message: 'Login successful' 
         });
     } else {
@@ -483,13 +554,24 @@ app.get('/api/auth/status', (req, res) => {
     console.log('  Session authenticated:', !!req.session?.authenticated);
     console.log('  Session data:', req.session);
     
+    const token = getTokenFromRequest(req);
+    const tokenValid = token && isValidToken(token);
+    const authenticated = isAuthenticated(req);
+    
+    console.log('  Token:', token ? token.substring(0, 8) + '...' : 'none');
+    console.log('  Token valid:', tokenValid);
+    console.log('  Final authenticated:', authenticated);
+    
     res.json({ 
-        authenticated: !!req.session?.authenticated,
+        authenticated: authenticated,
         sessionId: req.sessionID,
         sessionExists: !!req.session,
+        tokenExists: !!token,
+        tokenValid: tokenValid,
         debug: {
             session: req.session,
-            cookies: req.headers.cookie
+            cookies: req.headers.cookie,
+            activeTokensCount: activeTokens.size
         }
     });
 });
@@ -594,7 +676,7 @@ app.post('/api/settings/initial', async (req, res) => {
     console.log('Session authenticated:', !!req.session.authenticated);
     console.log('Request body:', req.body);
     
-    if (!req.session.authenticated) {
+    if (!isAuthenticated(req)) {
         console.log('Authentication failed - rejecting initial settings request');
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
@@ -678,7 +760,7 @@ app.post('/api/settings/current', async (req, res) => {
     console.log('Session authenticated:', !!req.session.authenticated);
     console.log('Session data:', req.session);
     
-    if (!req.session.authenticated) {
+    if (!isAuthenticated(req)) {
         console.log('Authentication failed - rejecting request');
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
@@ -747,7 +829,7 @@ app.post('/api/settings/current', async (req, res) => {
 
 // Add manual transaction
 app.post('/api/transaction', async (req, res) => {
-    if (!req.session.authenticated) {
+    if (!isAuthenticated(req)) {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
     
@@ -783,7 +865,7 @@ app.delete('/api/transaction/:index', async (req, res) => {
     console.log('Session authenticated:', !!req.session.authenticated);
     console.log('Requested index:', req.params.index);
     
-    if (!req.session.authenticated) {
+    if (!isAuthenticated(req)) {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
     
@@ -988,12 +1070,13 @@ app.get('/api/debug/current-data', async (req, res) => {
 
 // Test authentication endpoint
 app.get('/api/debug/auth-test', (req, res) => {
-    if (!req.session?.authenticated) {
+    if (!isAuthenticated(req)) {
         return res.status(401).json({ 
             success: false, 
             message: 'Not authenticated',
             sessionId: req.sessionID,
-            sessionData: req.session
+            sessionData: req.session,
+            token: getTokenFromRequest(req)
         });
     }
     
@@ -1001,7 +1084,8 @@ app.get('/api/debug/auth-test', (req, res) => {
         success: true, 
         message: 'Authentication working!',
         sessionId: req.sessionID,
-        sessionData: req.session
+        sessionData: req.session,
+        token: getTokenFromRequest(req)
     });
 });
 
@@ -1034,7 +1118,7 @@ app.get('/health', async (req, res) => {
 
 // Recalculate all deposits (admin endpoint)
 app.post('/api/recalculate', async (req, res) => {
-    if (!req.session.authenticated) {
+    if (!isAuthenticated(req)) {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
     
@@ -1050,7 +1134,7 @@ app.post('/api/recalculate', async (req, res) => {
 
 // Reset data (admin endpoint for testing)
 app.post('/api/reset-data', async (req, res) => {
-    if (!req.session.authenticated) {
+    if (!isAuthenticated(req)) {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
     

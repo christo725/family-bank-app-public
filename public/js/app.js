@@ -4,6 +4,20 @@ let accountData = {};
 let balanceChart = null;
 let isAuthenticated = false;
 
+// Helper function to get auth headers
+function getAuthHeaders() {
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    
+    const authToken = localStorage.getItem('authToken');
+    if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+    }
+    
+    return headers;
+}
+
 // Initialize the app
 document.addEventListener('DOMContentLoaded', function() {
     console.log('App initializing...');
@@ -149,6 +163,12 @@ async function login() {
         
         if (data.success) {
             isAuthenticated = true;
+            
+            // Store auth token if provided
+            if (data.authToken) {
+                localStorage.setItem('authToken', data.authToken);
+            }
+            
             updateAuthUI();
             loadAccountData(); // Refresh data after login
             showMessage(messageDiv, 'Login successful!', 'success');
@@ -171,6 +191,10 @@ async function logout() {
             method: 'POST',
             credentials: 'include'
         });
+        
+        // Clear stored auth token
+        localStorage.removeItem('authToken');
+        
         isAuthenticated = false;
         updateAuthUI();
         loadAccountData(); // Refresh data after logout
@@ -495,9 +519,7 @@ async function updateInitialSettings() {
         const response = await fetch('/api/settings/initial', {
             method: 'POST',
             credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify(data)
         });
         
@@ -537,9 +559,7 @@ async function updateCurrentSettings() {
         const response = await fetch('/api/settings/current', {
             method: 'POST',
             credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify(data)
         });
         
@@ -579,9 +599,7 @@ async function addTransaction() {
         const response = await fetch('/api/transaction', {
             method: 'POST',
             credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify(data)
         });
         
@@ -615,7 +633,8 @@ async function deleteTransaction(manualIndex) {
         console.log('Sending DELETE request to:', `/api/transaction/${manualIndex}`);
         const response = await fetch(`/api/transaction/${manualIndex}`, {
             method: 'DELETE',
-            credentials: 'include'
+            credentials: 'include',
+            headers: getAuthHeaders()
         });
         
         console.log('Delete response status:', response.status);
@@ -649,9 +668,7 @@ async function calculateSavingsGoal() {
         const response = await fetch('/api/calculate-goal', {
             method: 'POST',
             credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify({
                 goal_amount: goalAmount,
                 goal_date: goalDate
