@@ -182,6 +182,13 @@ async function logout() {
 // Load account data
 async function loadAccountData() {
     console.log('Loading account data...');
+    
+    // Show loading state
+    const balanceElement = document.getElementById('currentBalance');
+    const originalBalance = balanceElement.textContent;
+    balanceElement.textContent = 'Loading...';
+    balanceElement.classList.add('loading');
+    
     try {
         const response = await fetch('/api/account', {
             credentials: 'include'
@@ -191,10 +198,21 @@ async function loadAccountData() {
         console.log('Account data loaded successfully. Transaction count:', accountData.transactions?.length || 0);
         console.log('Manual transactions:', accountData.transactions?.filter(t => t.isManual).length || 0);
         
+        // Remove loading state
+        balanceElement.classList.remove('loading');
+        
         updateUI();
         updateSettingsForm();
     } catch (error) {
         console.error('Error loading account data:', error);
+        
+        // Remove loading state and restore original balance on error
+        balanceElement.classList.remove('loading');
+        if (originalBalance !== 'Loading...') {
+            balanceElement.textContent = originalBalance;
+        } else {
+            balanceElement.textContent = '$0.00';
+        }
     }
 }
 

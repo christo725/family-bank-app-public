@@ -22,6 +22,8 @@ if (process.env.NODE_ENV === 'production') {
 
 // In-memory storage for serverless environments
 let memoryStorage = null;
+let lastProcessedTime = null;
+const PROCESSING_COOLDOWN = 5000; // 5 seconds cooldown between processing
 
 // Initialize Redis client
 let redis = null;
@@ -155,38 +157,24 @@ function authenticate(username, password) {
 // Data management
 async function loadAccountData() {
     try {
+        let data = null;
+        
         // Try to load from Redis first
         if (redis) {
-            const data = await redis.get('bank_account_data');
-            if (data) {
-                // Redis.fromEnv() automatically deserializes JSON, so data is already an object
-                
-                // Convert date strings back to Date objects
-                if (data.start_date) data.start_date = parseDate(data.start_date);
-                if (data.settings_change_date) data.settings_change_date = parseDate(data.settings_change_date);
-                if (data.last_processed_saturday) data.last_processed_saturday = parseDate(data.last_processed_saturday);
-                if (data.last_processed_sunday) data.last_processed_sunday = parseDate(data.last_processed_sunday);
-                
-                // Convert transaction dates
-                if (data.manual_txns) {
-                    data.manual_txns.forEach(txn => {
-                        txn.Date = parseDate(txn.Date);
-                    });
-                }
-                if (data.auto_deposits) {
-                    data.auto_deposits.forEach(txn => {
-                        txn.Date = parseDate(txn.Date);
-                    });
-                }
-                
-                return data;
+            const redisData = await redis.get('bank_account_data');
+            if (redisData) {
+                data = redisData; // Redis.fromEnv() automatically deserializes JSON
+                console.log('Loaded data from Redis');
             }
         }
         
         // Fall back to file system for local development
-        if (!redis && fs.existsSync(DATA_FILE)) {
-            const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-            
+        if (!data && fs.existsSync(DATA_FILE)) {
+            data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+            console.log('Loaded data from file system');
+        }
+        
+        if (data) {
             // Convert date strings back to Date objects
             if (data.start_date) data.start_date = parseDate(data.start_date);
             if (data.settings_change_date) data.settings_change_date = parseDate(data.settings_change_date);
@@ -194,16 +182,26 @@ async function loadAccountData() {
             if (data.last_processed_sunday) data.last_processed_sunday = parseDate(data.last_processed_sunday);
             
             // Convert transaction dates
-            if (data.manual_txns) {
+            if (data.manual_txns && Array.isArray(data.manual_txns)) {
                 data.manual_txns.forEach(txn => {
                     txn.Date = parseDate(txn.Date);
                 });
             }
-            if (data.auto_deposits) {
+            if (data.auto_deposits && Array.isArray(data.auto_deposits)) {
                 data.auto_deposits.forEach(txn => {
                     txn.Date = parseDate(txn.Date);
                 });
             }
+            
+            // Ensure arrays exist
+            if (!data.manual_txns) data.manual_txns = [];
+            if (!data.auto_deposits) data.auto_deposits = [];
+            
+            console.log('Data loaded successfully:', {
+                account_holder: data.account_holder,
+                auto_deposits_count: data.auto_deposits.length,
+                manual_txns_count: data.manual_txns.length
+            });
             
             return data;
         }
@@ -212,6 +210,7 @@ async function loadAccountData() {
     }
     
     // Default data structure
+    console.log('Using default data structure');
     return {
         account_holder: "My",
         initial_balance: 0.0,
@@ -472,8 +471,23 @@ app.get('/api/auth/status', (req, res) => {
 app.get('/api/account', async (req, res) => {
     try {
         const data = await loadAccountData();
-        // Only process new deposits, don't reprocess existing ones
-        await processNewDeposits(data);
+        
+        // Check if we have existing data before processing deposits
+        const hasExistingData = data.auto_deposits && data.auto_deposits.length > 0;
+        const now = Date.now();
+        const shouldProcess = !lastProcessedTime || (now - lastProcessedTime > PROCESSING_COOLDOWN);
+        
+        if (!hasExistingData) {
+            console.log('No existing auto deposits found, processing new deposits');
+            await processNewDeposits(data);
+            lastProcessedTime = now;
+        } else if (shouldProcess) {
+            console.log(`Found ${data.auto_deposits.length} existing auto deposits, checking for new ones`);
+            await processNewDeposits(data);
+            lastProcessedTime = now;
+        } else {
+            console.log('Skipping deposit processing due to cooldown period');
+        }
         
         // Calculate current balance
         const allTxns = [...data.auto_deposits, ...data.manual_txns];
