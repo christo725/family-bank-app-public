@@ -1,105 +1,835 @@
 {
-  "account_holder": "Patrick",
+  "account_holder": "My",
   "initial_balance": 0,
-  "start_date": "2025-05-01",
-  "initial_allowance": 3,
-  "initial_interest": 3,
-  "current_allowance": 2,
-  "current_interest": 3,
-  "settings_change_date": "2025-07-01",
+  "start_date": "2023-12-31",
+  "initial_allowance": 5,
+  "initial_interest": 1,
+  "current_allowance": 5,
+  "current_interest": 1,
+  "settings_change_date": null,
   "manual_txns": [],
-  "last_processed_saturday": "2025-06-29",
-  "last_processed_sunday": "2025-06-30",
+  "last_processed_saturday": "2025-07-26",
+  "last_processed_sunday": "2025-07-27",
   "auto_deposits": [
     {
-      "Date": "2025-05-04",
+      "Date": "2024-01-06",
       "Type": "Weekly Allowance",
-      "Amount": 3
+      "Amount": 5
     },
     {
-      "Date": "2025-05-05",
-      "Type": "Interest 😊",
-      "Amount": 0.09
+      "Date": "2024-01-07",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.05
+    },
+    {
+      "Date": "2024-01-13",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-01-14",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.1005
+    },
+    {
+      "Date": "2024-01-20",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-01-21",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.151505
+    },
+    {
+      "Date": "2024-01-27",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-01-28",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.20302005
+    },
+    {
+      "Date": "2024-02-03",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-02-04",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.2550502505
+    },
+    {
+      "Date": "2024-02-10",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-02-11",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.307600753005
+    },
+    {
+      "Date": "2024-02-17",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-02-18",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.36067676053505
+    },
+    {
+      "Date": "2024-02-24",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-02-25",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.4142835281404005
+    },
+    {
+      "Date": "2024-03-02",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-03-03",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.4684263634218045
+    },
+    {
+      "Date": "2024-03-09",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-03-10",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.5231106270560225
+    },
+    {
+      "Date": "2024-03-16",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-03-17",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.5783417333265828
+    },
+    {
+      "Date": "2024-03-23",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-03-24",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.6341251506598485
+    },
+    {
+      "Date": "2024-03-30",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-03-31",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.6904664021664471
+    },
+    {
+      "Date": "2024-04-06",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-04-07",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.7473710661881116
+    },
+    {
+      "Date": "2024-04-13",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-04-14",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.8048447768499927
+    },
+    {
+      "Date": "2024-04-20",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-04-21",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.8628932246184925
+    },
+    {
+      "Date": "2024-04-27",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-04-28",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.9215221568646774
+    },
+    {
+      "Date": "2024-05-04",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-05-05",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 0.9807373784333243
+    },
+    {
+      "Date": "2024-05-11",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-05-12",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.0405447522176574
+    },
+    {
+      "Date": "2024-05-18",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-05-19",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.100950199739834
+    },
+    {
+      "Date": "2024-05-25",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-05-26",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.1619597017372323
+    },
+    {
+      "Date": "2024-06-01",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-06-02",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.2235792987546046
+    },
+    {
+      "Date": "2024-06-08",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-06-09",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.2858150917421507
+    },
+    {
+      "Date": "2024-06-15",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-06-16",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.348673242659572
+    },
+    {
+      "Date": "2024-06-22",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-06-23",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.4121599750861678
+    },
+    {
+      "Date": "2024-06-29",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-06-30",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.4762815748370293
+    },
+    {
+      "Date": "2024-07-06",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-07-07",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.5410443905853997
+    },
+    {
+      "Date": "2024-07-13",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-07-14",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.6064548344912535
+    },
+    {
+      "Date": "2024-07-20",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-07-21",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.672519382836166
+    },
+    {
+      "Date": "2024-07-27",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-07-28",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.7392445766645275
+    },
+    {
+      "Date": "2024-08-03",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-08-04",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.806637022431173
+    },
+    {
+      "Date": "2024-08-10",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-08-11",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.8747033926554846
+    },
+    {
+      "Date": "2024-08-17",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-08-18",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 1.9434504265820394
+    },
+    {
+      "Date": "2024-08-24",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-08-25",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.01288493084786
+    },
+    {
+      "Date": "2024-08-31",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-09-01",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.0830137801563384
+    },
+    {
+      "Date": "2024-09-07",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-09-08",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.153843917957902
+    },
+    {
+      "Date": "2024-09-14",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-09-15",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.225382357137481
+    },
+    {
+      "Date": "2024-09-21",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-09-22",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.2976361807088557
+    },
+    {
+      "Date": "2024-09-28",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-09-29",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.370612542515944
+    },
+    {
+      "Date": "2024-10-05",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-10-06",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.4443186679411038
+    },
+    {
+      "Date": "2024-10-12",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-10-13",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.518761854620515
+    },
+    {
+      "Date": "2024-10-19",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-10-20",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.59394947316672
+    },
+    {
+      "Date": "2024-10-26",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-10-27",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.669888967898387
+    },
+    {
+      "Date": "2024-11-02",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-11-03",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.746587857577371
+    },
+    {
+      "Date": "2024-11-09",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-11-10",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.8240537361531444
+    },
+    {
+      "Date": "2024-11-16",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-11-17",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.9022942735146757
+    },
+    {
+      "Date": "2024-11-23",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-11-24",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 2.9813172162498223
+    },
+    {
+      "Date": "2024-11-30",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-12-01",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.0611303884123204
+    },
+    {
+      "Date": "2024-12-07",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-12-08",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.1417416922964434
+    },
+    {
+      "Date": "2024-12-14",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-12-15",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.2231591092194076
+    },
+    {
+      "Date": "2024-12-21",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-12-22",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.3053907003116016
+    },
+    {
+      "Date": "2024-12-28",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2024-12-29",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.388444607314718
+    },
+    {
+      "Date": "2025-01-04",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-01-05",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.472329053387865
+    },
+    {
+      "Date": "2025-01-11",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-01-12",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.5570523439217436
+    },
+    {
+      "Date": "2025-01-18",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-01-19",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.642622867360961
+    },
+    {
+      "Date": "2025-01-25",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-01-26",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.7290490960345704
+    },
+    {
+      "Date": "2025-02-01",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-02-02",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.816339586994916
+    },
+    {
+      "Date": "2025-02-08",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-02-09",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.904502982864865
+    },
+    {
+      "Date": "2025-02-15",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-02-16",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 3.9935480126935134
+    },
+    {
+      "Date": "2025-02-22",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-02-23",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.083483492820449
+    },
+    {
+      "Date": "2025-03-01",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-03-02",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.1743183277486535
+    },
+    {
+      "Date": "2025-03-08",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-03-09",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.26606151102614
+    },
+    {
+      "Date": "2025-03-15",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-03-16",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.358722126136401
+    },
+    {
+      "Date": "2025-03-22",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-03-23",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.452309347397765
+    },
+    {
+      "Date": "2025-03-29",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-03-30",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.546832440871743
+    },
+    {
+      "Date": "2025-04-05",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-04-06",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.64230076528046
+    },
+    {
+      "Date": "2025-04-12",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-04-13",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.738723772933265
+    },
+    {
+      "Date": "2025-04-19",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-04-20",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.836111010662598
+    },
+    {
+      "Date": "2025-04-26",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-04-27",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 4.9344721207692235
+    },
+    {
+      "Date": "2025-05-03",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-05-04",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.033816841976916
+    },
+    {
+      "Date": "2025-05-10",
+      "Type": "Weekly Allowance",
+      "Amount": 5
     },
     {
       "Date": "2025-05-11",
-      "Type": "Weekly Allowance",
-      "Amount": 3
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.134155010396685
     },
     {
-      "Date": "2025-05-12",
-      "Type": "Interest 😊",
-      "Amount": 0.1827
+      "Date": "2025-05-17",
+      "Type": "Weekly Allowance",
+      "Amount": 5
     },
     {
       "Date": "2025-05-18",
-      "Type": "Weekly Allowance",
-      "Amount": 3
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.2354965605006525
     },
     {
-      "Date": "2025-05-19",
-      "Type": "Interest 😊",
-      "Amount": 0.278181
+      "Date": "2025-05-24",
+      "Type": "Weekly Allowance",
+      "Amount": 5
     },
     {
       "Date": "2025-05-25",
-      "Type": "Weekly Allowance",
-      "Amount": 3
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.337851526105659
     },
     {
-      "Date": "2025-05-26",
-      "Type": "Interest 😊",
-      "Amount": 0.37652643
+      "Date": "2025-05-31",
+      "Type": "Weekly Allowance",
+      "Amount": 5
     },
     {
       "Date": "2025-06-01",
-      "Type": "Weekly Allowance",
-      "Amount": 3
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.441230041366715
     },
     {
-      "Date": "2025-06-02",
-      "Type": "Interest 😊",
-      "Amount": 0.4778222229
+      "Date": "2025-06-07",
+      "Type": "Weekly Allowance",
+      "Amount": 5
     },
     {
       "Date": "2025-06-08",
-      "Type": "Weekly Allowance",
-      "Amount": 3
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.545642341780382
     },
     {
-      "Date": "2025-06-09",
-      "Type": "Interest 😊",
-      "Amount": 0.582156889587
+      "Date": "2025-06-14",
+      "Type": "Weekly Allowance",
+      "Amount": 5
     },
     {
       "Date": "2025-06-15",
-      "Type": "Weekly Allowance",
-      "Amount": 3
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.651098765198186
     },
     {
-      "Date": "2025-06-16",
-      "Type": "Interest 😊",
-      "Amount": 0.6896215962746101
+      "Date": "2025-06-21",
+      "Type": "Weekly Allowance",
+      "Amount": 5
     },
     {
       "Date": "2025-06-22",
-      "Type": "Weekly Allowance",
-      "Amount": 3
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.757609752850168
     },
     {
-      "Date": "2025-06-23",
-      "Type": "Interest 😊",
-      "Amount": 0.8003102441628483
+      "Date": "2025-06-28",
+      "Type": "Weekly Allowance",
+      "Amount": 5
     },
     {
       "Date": "2025-06-29",
-      "Type": "Weekly Allowance",
-      "Amount": 3
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.86518585037867
     },
     {
-      "Date": "2025-06-30",
-      "Type": "Interest 😊",
-      "Amount": 0.9143195514877337
+      "Date": "2025-07-05",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-07-06",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 5.973837708882456
+    },
+    {
+      "Date": "2025-07-12",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-07-13",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 6.083576085971281
+    },
+    {
+      "Date": "2025-07-19",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-07-20",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 6.194411846830993
+    },
+    {
+      "Date": "2025-07-26",
+      "Type": "Weekly Allowance",
+      "Amount": 5
+    },
+    {
+      "Date": "2025-07-27",
+      "Type": "Interest @ 1% 😊",
+      "Amount": 6.3063559652993035
     }
   ]
 }

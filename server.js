@@ -258,6 +258,15 @@ async function saveAccountData(data) {
             try {
                 await redis.set('bank_account_data', saveData);
                 console.log('Data saved to Redis successfully');
+                // Also save to file as backup in development
+                if (process.env.NODE_ENV !== 'production') {
+                    const dataDir = path.dirname(DATA_FILE);
+                    if (!fs.existsSync(dataDir)) {
+                        fs.mkdirSync(dataDir, { recursive: true });
+                    }
+                    fs.writeFileSync(DATA_FILE, JSON.stringify(saveData, null, 2));
+                    console.log('Data also saved to file as backup');
+                }
                 return true;
             } catch (redisError) {
                 console.error('Redis save failed:', redisError);
@@ -463,6 +472,7 @@ app.get('/api/auth/status', (req, res) => {
 app.get('/api/account', async (req, res) => {
     try {
         const data = await loadAccountData();
+        // Only process new deposits, don't reprocess existing ones
         await processNewDeposits(data);
         
         // Calculate current balance
@@ -606,6 +616,14 @@ app.post('/api/settings/initial', async (req, res) => {
             initial_interest: verifyData.initial_interest
         });
         
+        // Double-check that changes were actually persisted
+        if (verifyData.account_holder !== data.account_holder || 
+            verifyData.initial_allowance !== data.initial_allowance || 
+            verifyData.initial_interest !== data.initial_interest) {
+            console.error('Settings verification failed - data not properly saved');
+            return res.status(500).json({ success: false, message: 'Settings were not saved properly' });
+        }
+        
         res.json({ success: true });
     } catch (error) {
         console.error('Error updating initial settings:', error);
@@ -667,6 +685,13 @@ app.post('/api/settings/current', async (req, res) => {
                 current_allowance: verifyData.current_allowance,
                 current_interest: verifyData.current_interest
             });
+            
+            // Double-check that changes were actually persisted
+            if (verifyData.current_allowance !== data.current_allowance || 
+                verifyData.current_interest !== data.current_interest) {
+                console.error('Current settings verification failed - data not properly saved');
+                return res.status(500).json({ success: false, message: 'Current settings were not saved properly' });
+            }
             
             res.json({ success: true });
         } else {
@@ -959,6 +984,36 @@ app.post('/api/recalculate', async (req, res) => {
         res.json({ success: true, message: 'All deposits recalculated successfully' });
     } catch (error) {
         console.error('Error recalculating deposits:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+// Reset data (admin endpoint for testing)
+app.post('/api/reset-data', async (req, res) => {
+    if (!req.session.authenticated) {
+        return res.status(401).json({ success: false, message: 'Not authenticated' });
+    }
+    
+    try {
+        const defaultData = {
+            account_holder: "My",
+            initial_balance: 0.0,
+            start_date: new Date('2024-01-01'),
+            initial_allowance: 5.0,
+            initial_interest: 1.0,
+            current_allowance: 5.0,
+            current_interest: 1.0,
+            settings_change_date: null,
+            manual_txns: [],
+            last_processed_saturday: null,
+            last_processed_sunday: null,
+            auto_deposits: []
+        };
+        
+        await saveAccountData(defaultData);
+        res.json({ success: true, message: 'Data reset to defaults successfully' });
+    } catch (error) {
+        console.error('Error resetting data:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });

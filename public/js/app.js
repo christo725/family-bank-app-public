@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeDateInputs();
         checkAuthStatus();
         loadAccountData();
-        setInterval(loadAccountData, 30000); // Refresh every 30 seconds
+        setInterval(loadAccountData, 60000); // Refresh every 60 seconds (reduced frequency)
         setInterval(updateCurrentTime, 1000); // Update time every second
         
         // Check if logo exists and show it
