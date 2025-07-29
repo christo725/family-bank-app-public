@@ -103,20 +103,26 @@ function getTokenFromRequest(req) {
     // Check Authorization header first
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
-        return authHeader.substring(7);
+        const token = authHeader.substring(7);
+        console.log('Found token in Authorization header:', token.substring(0, 8) + '...');
+        return token;
     }
     
     // Check cookies
     if (req.headers.cookie) {
         const cookies = req.headers.cookie.split(';');
         for (let cookie of cookies) {
-            const [name, value] = cookie.trim().split('=');
+            const parts = cookie.trim().split('=');
+            const name = parts[0];
+            const value = parts.slice(1).join('='); // Handle values with = in them
             if (name === 'authToken') {
+                console.log('Found token in cookie:', value.substring(0, 8) + '...');
                 return value;
             }
         }
     }
     
+    console.log('No token found in request');
     return null;
 }
 
@@ -1070,22 +1076,49 @@ app.get('/api/debug/current-data', async (req, res) => {
 
 // Test authentication endpoint
 app.get('/api/debug/auth-test', (req, res) => {
-    if (!isAuthenticated(req)) {
+    const token = getTokenFromRequest(req);
+    const sessionAuth = req.session && req.session.authenticated;
+    const tokenValid = token && isValidToken(token);
+    const finalAuth = isAuthenticated(req);
+    
+    console.log('=== AUTH TEST DEBUG ===');
+    console.log('Session ID:', req.sessionID);
+    console.log('Session authenticated:', sessionAuth);
+    console.log('Token found:', !!token);
+    console.log('Token valid:', tokenValid);
+    console.log('Final authenticated:', finalAuth);
+    console.log('Active tokens count:', activeTokens.size);
+    console.log('Session data:', req.session);
+    console.log('Request headers:', req.headers);
+    
+    if (!finalAuth) {
         return res.status(401).json({ 
             success: false, 
             message: 'Not authenticated',
-            sessionId: req.sessionID,
-            sessionData: req.session,
-            token: getTokenFromRequest(req)
+            debug: {
+                sessionId: req.sessionID,
+                sessionAuthenticated: sessionAuth,
+                tokenFound: !!token,
+                tokenValid: tokenValid,
+                finalAuthenticated: finalAuth,
+                activeTokensCount: activeTokens.size,
+                headers: req.headers,
+                session: req.session
+            }
         });
     }
     
     res.json({ 
         success: true, 
         message: 'Authentication working!',
-        sessionId: req.sessionID,
-        sessionData: req.session,
-        token: getTokenFromRequest(req)
+        debug: {
+            sessionId: req.sessionID,
+            sessionAuthenticated: sessionAuth,
+            tokenFound: !!token,
+            tokenValid: tokenValid,
+            finalAuthenticated: finalAuth,
+            activeTokensCount: activeTokens.size
+        }
     });
 });
 

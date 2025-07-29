@@ -774,3 +774,27 @@ function showMessage(element, message, type) {
         element.innerHTML = '';
     }, 5000);
 }
+
+// Test authentication function
+async function testAuth() {
+    console.log('Testing authentication...');
+    
+    try {
+        const response = await fetch('/api/debug/auth-test', {
+            credentials: 'include',
+            headers: getAuthHeaders()
+        });
+        
+        const data = await response.json();
+        console.log('Auth test result:', data);
+        
+        if (data.success) {
+            alert('✅ Authentication working! You can now use settings.');
+        } else {
+            alert('❌ Authentication failed. Please login first.\n\nDebug info:\n' + JSON.stringify(data.debug, null, 2));
+        }
+    } catch (error) {
+        console.error('Auth test error:', error);
+        alert('❌ Auth test failed: ' + error.message);
+    }
+}
