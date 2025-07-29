@@ -67,15 +67,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'bank-app-secret-key',
+    secret: process.env.SESSION_SECRET || 'bank-app-secret-key-very-long-and-secure',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true, // Changed to true for better session handling
     cookie: { 
-        secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+        secure: false, // Disable secure for local testing
         httpOnly: true,
         sameSite: 'lax',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
+    },
+    name: 'bank.session.id' // Custom session name
 }));
 
 // ========== UTILITY FUNCTIONS ==========
@@ -445,10 +446,27 @@ function formatCurrency(amount) {
 app.post('/api/auth/login', (req, res) => {
     const { username, password } = req.body;
     
+    console.log('Login attempt:');
+    console.log('  Username:', username);
+    console.log('  Password provided:', !!password);
+    console.log('  Session ID before:', req.sessionID);
+    
     if (authenticate(username, password)) {
         req.session.authenticated = true;
-        res.json({ success: true });
+        req.session.username = username;
+        req.session.loginTime = new Date().toISOString();
+        
+        console.log('Login successful:');
+        console.log('  Session ID after:', req.sessionID);
+        console.log('  Session data:', req.session);
+        
+        res.json({ 
+            success: true, 
+            sessionId: req.sessionID,
+            message: 'Login successful' 
+        });
     } else {
+        console.log('Login failed: Invalid credentials');
         res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 });
@@ -459,11 +477,20 @@ app.post('/api/auth/logout', (req, res) => {
 });
 
 app.get('/api/auth/status', (req, res) => {
-    console.log('Auth status check - Session ID:', req.sessionID, 'Authenticated:', !!req.session.authenticated);
+    console.log('Auth status check:');
+    console.log('  Session ID:', req.sessionID);
+    console.log('  Session exists:', !!req.session);
+    console.log('  Session authenticated:', !!req.session?.authenticated);
+    console.log('  Session data:', req.session);
+    
     res.json({ 
-        authenticated: !!req.session.authenticated,
+        authenticated: !!req.session?.authenticated,
         sessionId: req.sessionID,
-        debug: process.env.NODE_ENV !== 'production' ? req.session : undefined
+        sessionExists: !!req.session,
+        debug: {
+            session: req.session,
+            cookies: req.headers.cookie
+        }
     });
 });
 
@@ -957,6 +984,25 @@ app.get('/api/debug/current-data', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+// Test authentication endpoint
+app.get('/api/debug/auth-test', (req, res) => {
+    if (!req.session?.authenticated) {
+        return res.status(401).json({ 
+            success: false, 
+            message: 'Not authenticated',
+            sessionId: req.sessionID,
+            sessionData: req.session
+        });
+    }
+    
+    res.json({ 
+        success: true, 
+        message: 'Authentication working!',
+        sessionId: req.sessionID,
+        sessionData: req.session
+    });
 });
 
 // Health check endpoint
