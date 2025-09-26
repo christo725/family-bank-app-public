@@ -28,9 +28,24 @@ const PROCESSING_COOLDOWN = 5000; // 5 seconds cooldown between processing
 // Initialize Redis client
 let redis = null;
 try {
-    // Use Redis.fromEnv() which automatically detects environment variables
-    redis = Redis.fromEnv();
-    console.log('Redis client initialized successfully with fromEnv()');
+    // Try KV variables first (Vercel KV), then fallback to fromEnv()
+    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+        redis = new Redis({
+            url: process.env.KV_REST_API_URL,
+            token: process.env.KV_REST_API_TOKEN
+        });
+        console.log('Redis client initialized with KV variables');
+
+        // Debug: Check what keys exist in the database
+        redis.keys('*').then(keys => {
+            console.log('Keys in database:', keys);
+        }).catch(err => {
+            console.log('Could not list keys:', err.message);
+        });
+    } else {
+        redis = Redis.fromEnv();
+        console.log('Redis client initialized with fromEnv()');
+    }
 } catch (error) {
     console.log('Redis initialization failed, using file storage:', error.message);
     redis = null;
@@ -1113,6 +1128,47 @@ app.post('/api/calculate-goal', async (req, res) => {
     }
 });
 
+
+// Debug Redis and check what's in the database
+app.get('/api/check-redis', async (req, res) => {
+    const result = {
+        redis_configured: !!redis,
+        env_vars: {
+            KV_REST_API_URL: !!process.env.KV_REST_API_URL,
+            KV_REST_API_TOKEN: !!process.env.KV_REST_API_TOKEN,
+        }
+    };
+
+    if (redis) {
+        try {
+            // Check connection
+            await redis.ping();
+            result.connected = true;
+
+            // Get all keys
+            const keys = await redis.keys('*');
+            result.all_keys = keys;
+
+            // Try to get our data
+            const data = await redis.get('bank_account_data');
+            result.has_bank_data = !!data;
+
+            if (data) {
+                const parsed = typeof data === 'string' ? JSON.parse(data) : data;
+                result.data_preview = {
+                    account_holder: parsed.account_holder,
+                    current_allowance: parsed.current_allowance,
+                    current_interest: parsed.current_interest,
+                    balance: parsed.current_balance
+                };
+            }
+        } catch (e) {
+            result.error = e.message;
+        }
+    }
+
+    res.json(result);
+});
 
 // Debug endpoint to check current data
 app.get('/api/debug/current-data', async (req, res) => {
