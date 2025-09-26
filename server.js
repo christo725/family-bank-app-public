@@ -606,6 +606,23 @@ app.get('/api/auth/status', (req, res) => {
     });
 });
 
+// Heartbeat endpoint - keeps database active
+app.get('/api/heartbeat', async (req, res) => {
+    try {
+        if (redis) {
+            // Update a heartbeat timestamp
+            await redis.set('heartbeat', new Date().toISOString());
+            console.log('Heartbeat updated:', new Date().toISOString());
+            res.json({ success: true, timestamp: new Date().toISOString() });
+        } else {
+            res.json({ success: false, message: 'Redis not configured' });
+        }
+    } catch (error) {
+        console.error('Heartbeat error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // Account data
 app.get('/api/account', async (req, res) => {
     try {

@@ -1,0 +1,21 @@
+name: Database Heartbeat
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every Sunday (weekly)
+    - cron: '0 0 * * 0'
+  workflow_dispatch:  # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping heartbeat endpoint
+        run: |
+          response=$(curl -s https://family-bank-app-public.vercel.app/api/heartbeat)
+          echo "Heartbeat response: $response"
+
+      - name: Verify success
+        run: |
+          echo "Heartbeat completed at $(date)"
