@@ -33,8 +33,6 @@ try {
     console.log('Redis client initialized successfully with fromEnv()');
 } catch (error) {
     console.log('Redis initialization failed, using file storage:', error.message);
-    console.log('UPSTASH_REDIS_REST_URL present:', !!process.env.UPSTASH_REDIS_REST_URL);
-    console.log('UPSTASH_REDIS_REST_TOKEN present:', !!process.env.UPSTASH_REDIS_REST_TOKEN);
     redis = null;
 }
 
